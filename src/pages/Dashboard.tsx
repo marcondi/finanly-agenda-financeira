@@ -71,17 +71,19 @@ export function Dashboard() {
   }, [finance.transactions, month, year]);
 
   const stats = useMemo(() => {
-    const income = filteredTransactions.filter(t => t.type === TransactionType.INCOME)
+    const income = filteredTransactions
+      .filter(t => t.type === TransactionType.INCOME)
       .reduce((acc, t) => acc + t.amount, 0);
 
-    const expense = filteredTransactions.filter(t => t.type === TransactionType.EXPENSE)
+    const expense = filteredTransactions
+      .filter(t => t.type === TransactionType.EXPENSE)
       .reduce((acc, t) => acc + t.amount, 0);
 
     return { income, expense, balance: income - expense };
   }, [filteredTransactions]);
 
   /* ======================================================================
-     ✅ AQUI ESTÁ A CORREÇÃO DEFINITIVA (user_id incluído)
+     ✅ CORREÇÃO: força TypeScript a aceitar `user` como não-nulo
      ====================================================================== */
   const handleSubmitTransaction = async (data: any, isBill: boolean) => {
     let success = false;
@@ -95,7 +97,7 @@ export function Dashboard() {
       } else {
         success = await finance.addTransaction({
           ...data,
-          user_id: user.id // ✅ ESSENCIAL PARA O RLS
+          user_id: user!.id
         });
       }
     }
@@ -111,22 +113,24 @@ export function Dashboard() {
     }
   };
 
-  /* ============================== render ============================== */
   return (
     <div className="max-w-7xl mx-auto px-6 py-10 min-h-screen">
-
-      {/* BOTÃO ADICIONAR */}
       <button
-        onClick={() => { setEditingTransaction(null); setIsAddModalOpen(true); }}
-        className="fixed bottom-10 right-10 w-20 h-20 rounded-3xl bg-indigo-600 text-white 
-                   shadow-2xl flex items-center justify-center text-4xl">
+        onClick={() => {
+          setEditingTransaction(null);
+          setIsAddModalOpen(true);
+        }}
+        className="fixed bottom-10 right-10 w-20 h-20 rounded-3xl bg-indigo-600 text-white shadow-2xl flex items-center justify-center text-4xl"
+      >
         <PlusIcon />
       </button>
 
-      {/* MODAL NOVA TRANSAÇÃO */}
       <Modal
         isOpen={isAddModalOpen}
-        onClose={() => { setIsAddModalOpen(false); setEditingTransaction(null); }}
+        onClose={() => {
+          setIsAddModalOpen(false);
+          setEditingTransaction(null);
+        }}
         title={editingTransaction ? 'Editar Registro' : 'Novo Registro'}
       >
         <TransactionForm
@@ -135,7 +139,6 @@ export function Dashboard() {
           onSubmit={handleSubmitTransaction}
         />
       </Modal>
-
     </div>
   );
 }
