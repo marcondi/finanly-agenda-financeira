@@ -27,7 +27,7 @@ Se você não consegue instalar o Node.js na sua máquina, a melhor forma é usa
 
 ---
 
-## 📤 Como Enviar para o GitHub (Comandos)
+## 📤 Como Enviar para o GitHub "Comandos"
 
 1. Crie um novo repositório vazio no GitHub.
 2. No terminal da pasta do projeto:
